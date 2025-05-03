@@ -111,8 +111,8 @@ const ChatbotWidget: React.FC = () => {
         <Paper
           elevation={8}
           sx={{
-            width: 420,
-            height: 540,
+            width: 600,
+            height: 700,
             p: 0,
             display: open ? 'flex' : 'none',
             flexDirection: 'column',
@@ -170,11 +170,13 @@ const ChatbotWidget: React.FC = () => {
                     borderRadius: 2,
                     maxWidth: '80%',
                     fontSize: 15,
-                    whiteSpace: msg.sender === 'bot' ? 'pre-wrap' : 'normal',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
+                    overflowWrap: 'break-word',
                     fontFamily: msg.sender === 'bot' ? 'monospace' : 'inherit',
                   }}
                 >
-                  {msg.sender === 'bot' ? <pre style={{ margin: 0 }}>{msg.text}</pre> : msg.text}
+                  {msg.sender === 'bot' ? <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{msg.text}</pre> : msg.text}
                 </Box>
               </Box>
             ))}
