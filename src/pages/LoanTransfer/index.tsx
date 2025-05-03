@@ -62,7 +62,7 @@ const LoanTransfer: React.FC = () => {
   };
 
   const sourceUserLoans = loans.filter(
-    (loan) => loan.user?.username === sourceUser
+    (loan) => loan.username === sourceUser
   );
 
   const loading = usersLoading || loansLoading;

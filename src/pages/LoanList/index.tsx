@@ -132,7 +132,7 @@ const LoanList: React.FC = () => {
                 <TableCell>{loan.term}</TableCell>
                 <TableCell>{new Date(loan.startDate).toLocaleDateString()}</TableCell>
                 <TableCell>{loan.status}</TableCell>
-                <TableCell>{loan.user?.username}</TableCell>
+                <TableCell>{loan.username}</TableCell>
                 <TableCell>
                   <IconButton
                     color="primary"
