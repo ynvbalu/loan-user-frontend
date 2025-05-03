@@ -49,6 +49,11 @@ export const transferLoans = createAsyncThunk('loans/transfer', async (transfer:
   return response.data;
 });
 
+export const silentFetchLoans = createAsyncThunk('loans/silentFetch', async () => {
+  const response = await loanApi.getAllLoans();
+  return response.data;
+});
+
 const loanSlice = createSlice({
   name: 'loans',
   initialState,
@@ -102,6 +107,9 @@ const loanSlice = createSlice({
       })
       .addCase(deleteLoan.fulfilled, (state, action) => {
         state.loans = state.loans.filter((loan) => loan.id !== action.payload);
+      })
+      .addCase(silentFetchLoans.fulfilled, (state, action) => {
+        state.loans = action.payload;
       });
   },
 });

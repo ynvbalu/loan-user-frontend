@@ -44,6 +44,11 @@ export const deleteUser = createAsyncThunk('users/delete', async (id: number) =>
   return id;
 });
 
+export const silentFetchUsers = createAsyncThunk('users/silentFetch', async () => {
+  const response = await userApi.getAllUsers();
+  return response.data;
+});
+
 const userSlice = createSlice({
   name: 'users',
   initialState,
@@ -97,6 +102,9 @@ const userSlice = createSlice({
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.users = state.users.filter((user) => user.id !== action.payload);
+      })
+      .addCase(silentFetchUsers.fulfilled, (state, action) => {
+        state.users = action.payload;
       });
   },
 });
