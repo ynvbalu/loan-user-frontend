@@ -9,13 +9,50 @@ import {
   CircularProgress,
   Fade,
   Divider,
+  Tooltip,
 } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
+import MicIcon from '@mui/icons-material/Mic';
+import MicOffIcon from '@mui/icons-material/MicOff';
 import { useDispatch } from 'react-redux';
 import { silentFetchLoans } from '../store/slices/loanSlice';
 import { silentFetchUsers } from '../store/slices/userSlice';
+import { AppDispatch } from '../store';
+
+// Add type definitions for Web Speech API
+interface SpeechRecognitionEvent extends Event {
+  results: {
+    [index: number]: {
+      [index: number]: {
+        transcript: string;
+      };
+    };
+  };
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: SpeechRecognitionErrorEvent) => void;
+  onend: () => void;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: new () => SpeechRecognition;
+    webkitSpeechRecognition: new () => SpeechRecognition;
+  }
+}
 
 interface ChatMessage {
   sender: 'user' | 'bot';
@@ -30,14 +67,48 @@ const ChatbotWidget: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isListening, setIsListening] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const dispatch = useDispatch();
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (open && chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [chatHistory, open]);
+
+  useEffect(() => {
+    // Initialize speech recognition
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = 'en-US';
+
+      recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
+        const transcript = event.results[0][0].transcript;
+        setInputText(transcript);
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
 
   const handleToggle = () => setOpen((prev) => !prev);
 
@@ -82,6 +153,26 @@ const ChatbotWidget: React.FC = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !loading) {
       handleSend();
+    }
+  };
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      setError('Speech recognition is not supported in your browser.');
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+    } else {
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+        setError(null); // Clear any previous errors
+      } catch (error) {
+        console.error('Error starting speech recognition:', error);
+        setError('Failed to start voice recognition. Please try again.');
+      }
     }
   };
 
@@ -149,7 +240,7 @@ const ChatbotWidget: React.FC = () => {
           >
             {chatHistory.length === 0 && (
               <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                Ask me anything about loan users or transfers!
+                Ask me anything about loan users or transfers! You can type or use voice input.
               </Typography>
             )}
             {chatHistory.map((msg, idx) => (
@@ -188,13 +279,49 @@ const ChatbotWidget: React.FC = () => {
               value={inputText}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              placeholder="Type your message..."
+              placeholder={isListening ? "Listening... Speak now" : "Type your message or use voice input..."}
               size="small"
               fullWidth
               aria-label="Type your message"
               disabled={loading}
               autoFocus={open}
+              sx={{
+                '& .MuiInputBase-root': {
+                  transition: 'all 0.3s ease',
+                  ...(isListening && {
+                    backgroundColor: 'rgba(255, 0, 0, 0.05)',
+                    borderColor: 'error.main',
+                  }),
+                },
+              }}
             />
+            <Tooltip title={isListening ? "Stop listening" : "Start voice input"}>
+              <IconButton
+                color={isListening ? 'error' : 'primary'}
+                aria-label={isListening ? 'Stop voice input' : 'Start voice input'}
+                onClick={toggleListening}
+                disabled={loading}
+                sx={{
+                  transition: 'all 0.3s ease',
+                  ...(isListening && {
+                    animation: 'pulse 1.5s infinite',
+                    '@keyframes pulse': {
+                      '0%': {
+                        transform: 'scale(1)',
+                      },
+                      '50%': {
+                        transform: 'scale(1.1)',
+                      },
+                      '100%': {
+                        transform: 'scale(1)',
+                      },
+                    },
+                  }),
+                }}
+              >
+                {isListening ? <MicOffIcon /> : <MicIcon />}
+              </IconButton>
+            </Tooltip>
             <IconButton
               color="primary"
               aria-label="Send message"
