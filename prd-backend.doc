@@ -1,0 +1,145 @@
+# Product Requirements Document (PRD): Loan User Management Microservice
+
+## 1. Overview
+
+The Loan User Management Microservice is a Java 21 Spring Boot application that provides APIs for managing users and their associated loans. The system will use an in-memory database for data storage and will provide comprehensive documentation through Swagger UI.
+
+## 2. Objectives
+
+- Create a robust microservice architecture for managing loan users
+- Implement complete CRUD operations for both users and loans
+- Allow users to be associated with multiple loans
+- Track user Out-Of-Office (OOO) status
+- Provide functionality for transferring loans between users
+- Ensure comprehensive API documentation through Swagger UI
+- Include sample data generation for testing purposes
+
+## 3. Functional Requirements
+
+### 3.1 User Management
+- Create new users with personal information and OOO status
+- Retrieve user details by ID or username
+- Update existing user information
+- Delete users from the system
+- Count total number of users in the system
+- Check if a user exists by ID or username
+- Check if a user is Out-Of-Office (OOO)
+
+### 3.2 Loan Management
+- Create new loans with appropriate details
+- Associate loans with specific users
+- Retrieve loan details by ID or other search criteria
+- Update existing loan information
+- Delete loans from the system
+- Count total number of loans in the system
+- Check if a specific loan exists
+- Transfer loans from one user to another
+
+### 3.3 User-Loan Relationship
+- Users can be assigned to multiple loans
+- Loans can be transferred between users
+- System must maintain the integrity of user-loan relationships
+
+## 4. Technical Requirements
+
+### 4.1 Architecture
+- Spring Boot microservice architecture
+- RESTful API design
+- In-memory database (H2) for data storage
+- Swagger UI for API documentation
+
+### 4.2 Technology Stack
+- Java 21
+- Spring Boot 3.x
+- Spring Data JPA
+- H2 Database
+- OpenAPI/Swagger for documentation
+- JUnit and MockMvc for testing
+
+### 4.3 Data Models
+
+**User Entity:**
+- ID (Primary Key)
+- Username (Unique)
+- First Name
+- Last Name
+- Email
+- Phone Number
+- OOO Status (Boolean)
+- Creation Date
+- List of associated loans
+
+**Loan Entity:**
+- ID (Primary Key)
+- Loan Number (Unique)
+- Amount
+- Interest Rate
+- Term (in months)
+- Start Date
+- Status (Active, Closed, Pending)
+- User Reference
+
+## 5. API Endpoints
+
+### 5.1 User APIs
+- `POST /api/users` - Create a new user
+- `GET /api/users` - Get all users
+- `GET /api/users/{id}` - Get user by ID
+- `GET /api/users/username/{username}` - Get user by username
+- `PUT /api/users/{id}` - Update a user
+- `DELETE /api/users/{id}` - Delete a user
+- `GET /api/users/count` - Get total count of users
+- `GET /api/users/exists/{id}` - Check if user exists by ID
+- `GET /api/users/exists/username/{username}` - Check if user exists by username
+- `GET /api/users/{id}/ooo` - Check if user is OOO by ID
+- `GET /api/users/username/{username}/ooo` - Check if user is OOO by username
+
+### 5.2 Loan APIs
+- `POST /api/loans` - Create a new loan
+- `GET /api/loans` - Get all loans
+- `GET /api/loans/{id}` - Get loan by ID
+- `PUT /api/loans/{id}` - Update a loan
+- `DELETE /api/loans/{id}` - Delete a loan
+- `GET /api/loans/count` - Get total count of loans
+- `GET /api/loans/exists/{id}` - Check if loan exists
+
+### 5.3 User-Loan APIs
+- `POST /api/users/{userId}/loans` - Add a loan to a user
+- `GET /api/users/{userId}/loans` - Get all loans for a user
+- `POST /api/loans/transfer` - Transfer loans between users by username
+
+## 6. Sample Data
+
+- System will be pre-populated with 10 sample users
+- Some users will have OOO status set to true
+- Each sample user will have 10 associated loans
+- Total of 100 sample loans will be created for testing
+
+## 7. Non-Functional Requirements
+
+### 7.1 Performance
+- API response times should be under 200ms
+- System should handle concurrent requests efficiently
+
+### 7.2 Security
+- Basic input validation to prevent injection attacks
+
+### 7.3 Documentation
+- Comprehensive API documentation with Swagger UI
+- Clear request/response examples
+- Required parameters and response codes documented
+
+## 8. Acceptance Criteria
+
+- All API endpoints function as specified
+- Sample data is correctly generated, including some users with OOO status
+- Swagger UI provides comprehensive API documentation
+- All CRUD operations for both users and loans work correctly
+- User OOO status can be checked
+- Loan transfer functionality works as specified
+- In-memory database correctly maintains relationships between entities
+
+## 9. Constraints
+
+- The system will use an in-memory database, so data persistence is limited to application runtime
+- The system is designed as a standalone microservice without external dependencies

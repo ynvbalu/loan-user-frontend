@@ -1,0 +1,211 @@
+# Product Requirements Document (PRD): Loan User Management React Frontend
+
+## 1. Overview
+
+The Loan User Management React Frontend is a web application that provides a user-friendly interface for interacting with the Loan User Management Microservice. This frontend will allow users to perform all operations available in the backend API through an intuitive and responsive UI.
+
+## 2. Objectives
+
+- Create a modern, responsive React application for loan user management
+- Implement all functionality available in the backend microservice
+- Provide intuitive user interfaces for managing users and loans
+- Enable easy visualization of user-loan relationships
+- Support all CRUD operations for both users and loans
+- Display user OOO status and enable filtering based on status
+- Allow for loan transfers between users
+- Implement an efficient and user-friendly dashboard
+
+## 3. Functional Requirements
+
+### 3.1 User Management
+- View a list of all users with pagination and filtering options
+- View detailed information about a specific user
+- Create new users with all required information and OOO status
+- Update existing user information including OOO status
+- Delete users with confirmation
+- Search for users by various criteria
+- View user count statistics
+- Visual indicator for users with OOO status
+
+### 3.2 Loan Management
+- View a list of all loans with pagination and filtering options
+- View detailed information about a specific loan
+- Create new loans with all required details
+- Associate loans with specific users during creation or update
+- Update existing loan information
+- Delete loans with confirmation
+- Search for loans by various criteria
+- View loan count statistics
+
+### 3.3 User-Loan Relationship
+- View all loans associated with a selected user
+- Add new loans to a user
+- Transfer loans between users with an intuitive interface
+- Visualize loan distribution among users
+
+### 3.4 Dashboard
+- Overview of system statistics (total users, total loans, active loans, etc.)
+- Quick access to users with OOO status
+- Recent activity log
+- Performance metrics visualization
+
+## 4. Technical Requirements
+
+### 4.1 Architecture
+- Single-page application (SPA) using React
+- State management with Redux or Context API
+- REST API integration with the backend microservice
+- Responsive design for various screen sizes
+
+### 4.2 Technology Stack
+- React 18+ with functional components and hooks
+- TypeScript for type safety
+- Redux Toolkit or React Context API for state management
+- React Router for navigation
+- Axios for API calls
+- Material-UI or Ant Design for UI components
+- Chart.js or D3.js for data visualization
+- React Testing Library and Jest for testing
+
+### 4.3 Key UI Components
+
+**Layout Components:**
+- Navigation bar with quick access to main features
+- Sidebar for detailed navigation
+- Footer with system information
+- Responsive container layout
+
+**User Management Components:**
+- User list with pagination, sorting, and filtering
+- User detail view/form
+- User creation/edit form
+- User search component
+- OOO status toggle with visual indicators
+
+**Loan Management Components:**
+- Loan list with pagination, sorting, and filtering
+- Loan detail view/form
+- Loan creation/edit form
+- Loan search component
+- Loan status indicators
+
+**User-Loan Components:**
+- User loans view
+- Loan assignment interface
+- Loan transfer interface
+- User-loan relationship visualization
+
+**Dashboard Components:**
+- Statistics cards
+- Activity timeline
+- Data visualization charts
+- Quick action buttons
+
+## 5. UI/UX Requirements
+
+### 5.1 User Interface
+- Clean, modern interface with consistent styling
+- Intuitive navigation with breadcrumbs
+- Responsive design that works on desktop, tablet, and mobile
+- Consistent color scheme and typography
+- Clear visual hierarchy
+- Accessibility compliance (WCAG 2.1 AA)
+
+### 5.2 User Experience
+- Minimal loading times and optimized performance
+- Meaningful loading indicators
+- Clear feedback for all user actions
+- Form validation with helpful error messages
+- Confirmation dialogs for destructive actions
+- Persistent user preferences
+- Keyboard navigation support
+
+## 6. Application Flows
+
+### 6.1 User Management Flow
+1. View list of users
+2. Filter/search for specific users
+3. View user details
+4. Create/edit/delete users
+5. Toggle OOO status
+
+### 6.2 Loan Management Flow
+1. View list of loans
+2. Filter/search for specific loans
+3. View loan details
+4. Create/edit/delete loans
+
+### 6.3 Loan Transfer Flow
+1. Select source user
+2. View loans assigned to source user
+3. Select loans to transfer
+4. Select target user
+5. Confirm and complete transfer
+
+## 7. API Integration
+
+The frontend will integrate with all endpoints from the backend microservice:
+
+### 7.1 User API Integration
+- Implement all user-related API calls
+- Handle success and error responses appropriately
+- Implement caching for frequently accessed user data
+
+### 7.2 Loan API Integration
+- Implement all loan-related API calls
+- Handle success and error responses appropriately
+- Implement caching for frequently accessed loan data
+
+### 7.3 User-Loan API Integration
+- Implement all user-loan relationship API calls
+- Enable seamless loan transfers
+
+## 8. Non-Functional Requirements
+
+### 8.1 Performance
+- Initial load time under 2 seconds
+- Response time for user interactions under 300ms
+- Efficient network requests with appropriate caching
+- Optimized bundle size
+
+### 8.2 Security
+- Input validation on all forms
+- CSRF protection
+- Secure API communication
+- XSS prevention
+
+### 8.3 Maintainability
+- Well-structured component hierarchy
+- Consistent coding style and documentation
+- Reusable components
+- Comprehensive test coverage
+
+## 9. Testing Requirements
+
+- Unit tests for all components
+- Integration tests for component interactions
+- End-to-end tests for critical user flows
+- Accessibility testing
+- Cross-browser testing
+- Responsive design testing
+
+## 10. Acceptance Criteria
+
+- All screens and flows function as specified
+- UI is responsive across different device sizes
+- All API integrations function correctly
+- Forms include proper validation
+- Users can perform all CRUD operations on both users and loans
+- Loan transfer functionality works as specified
+- OOO status is clearly visible and can be toggled
+- Dashboard presents relevant information
+- Application meets performance requirements
+
+## 11. Future Enhancements
+
+- Advanced filtering and reporting capabilities
+- Data export functionality
+- User activity logs
+- Role-based access control
+- Dark mode support
+- Internationalization support
