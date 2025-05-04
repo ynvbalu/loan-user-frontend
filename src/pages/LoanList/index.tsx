@@ -95,6 +95,12 @@ const LoanList: React.FC = () => {
     );
   }
 
+  // Helper function to check if a user is OOO
+  const isUserOOO = (username: string) => {
+    const user = users.find(u => u.username === username);
+    return user?.oooStatus || false;
+  };
+
   return (
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
@@ -124,31 +130,56 @@ const LoanList: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {loans.map((loan: Loan) => (
-              <TableRow key={loan.id}>
-                <TableCell>{loan.loanNumber}</TableCell>
-                <TableCell>${loan.amount.toLocaleString()}</TableCell>
-                <TableCell>{loan.interestRate}%</TableCell>
-                <TableCell>{loan.term}</TableCell>
-                <TableCell>{new Date(loan.startDate).toLocaleDateString()}</TableCell>
-                <TableCell>{loan.status}</TableCell>
-                <TableCell>{loan.username}</TableCell>
-                <TableCell>
-                  <IconButton
-                    color="primary"
-                    onClick={() => navigate(`/loans/${loan.id}`)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    color="error"
-                    onClick={() => handleDelete(loan.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+            {loans.map((loan: Loan) => {
+              const isOOO = isUserOOO(loan.username);
+              return (
+                <TableRow 
+                  key={loan.id}
+                  sx={{
+                    backgroundColor: isOOO ? '#fffde7' : 'inherit',
+                    '&:hover': {
+                      backgroundColor: isOOO ? '#fff9c4' : 'rgba(0, 0, 0, 0.04)',
+                    },
+                  }}
+                >
+                  <TableCell>{loan.loanNumber}</TableCell>
+                  <TableCell>${loan.amount.toLocaleString()}</TableCell>
+                  <TableCell>{loan.interestRate}%</TableCell>
+                  <TableCell>{loan.term}</TableCell>
+                  <TableCell>{new Date(loan.startDate).toLocaleDateString()}</TableCell>
+                  <TableCell>{loan.status}</TableCell>
+                  <TableCell>
+                    {loan.username}
+                    {isOOO && (
+                      <Typography 
+                        component="span" 
+                        sx={{ 
+                          ml: 1, 
+                          color: 'warning.main',
+                          fontSize: '0.875rem'
+                        }}
+                      >
+                        (OOO)
+                      </Typography>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="primary"
+                      onClick={() => navigate(`/loans/${loan.id}`)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDelete(loan.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

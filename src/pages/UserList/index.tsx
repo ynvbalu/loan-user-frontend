@@ -115,7 +115,15 @@ const UserList: React.FC = () => {
           </TableHead>
           <TableBody>
             {users.map((user: User) => (
-              <TableRow key={user.id}>
+              <TableRow 
+                key={user.id}
+                sx={{
+                  backgroundColor: user.oooStatus ? '#fffde7' : 'inherit',
+                  '&:hover': {
+                    backgroundColor: user.oooStatus ? '#fff9c4' : 'rgba(0, 0, 0, 0.04)',
+                  },
+                }}
+              >
                 <TableCell>{user.username}</TableCell>
                 <TableCell>{`${user.firstName} ${user.lastName}`}</TableCell>
                 <TableCell>{user.email}</TableCell>
