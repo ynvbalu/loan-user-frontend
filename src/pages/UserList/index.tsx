@@ -49,7 +49,17 @@ const UserList: React.FC = () => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setNewUser({
+      username: 'user' + Math.floor(Math.random() * 1000),
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+      phoneNumber: '+1-555-0123',
+      oooStatus: false
+    });
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

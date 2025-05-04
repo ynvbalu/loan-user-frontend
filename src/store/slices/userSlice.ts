@@ -80,6 +80,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchUserById.fulfilled, (state, action) => {
         state.loading = false;
+        state.selectedUser = action.payload;
         const index = state.users.findIndex(user => user.id === action.payload.id);
         if (index !== -1) {
           state.users[index] = action.payload;

@@ -6,6 +6,7 @@ export interface User {
   email: string;
   phoneNumber: string;
   creationDate: string;
+  oooStatus: boolean;
   loans: Loan[];
 }
 
@@ -28,6 +29,7 @@ export interface CreateUserDto {
   lastName: string;
   email: string;
   phoneNumber: string;
+  oooStatus: boolean;
 }
 
 export interface UpdateUserDto extends Partial<CreateUserDto> {}
