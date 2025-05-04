@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Loan, CreateLoanDto, UpdateLoanDto, LoanTransferDto } from '../../types';
-import { loanApi, userLoanApi } from '../../services/api';
+import { Loan, CreateLoanDto, UpdateLoanDto } from '../../types';
+import { loanApi } from '../../services/api';
 
 interface LoanState {
   loans: Loan[];
@@ -42,11 +42,6 @@ export const updateLoan = createAsyncThunk(
 export const deleteLoan = createAsyncThunk('loans/delete', async (id: number) => {
   await loanApi.deleteLoan(id);
   return id;
-});
-
-export const transferLoans = createAsyncThunk('loans/transfer', async (transfer: LoanTransferDto) => {
-  const response = await userLoanApi.transferLoans(transfer);
-  return response.data;
 });
 
 export const silentFetchLoans = createAsyncThunk('loans/silentFetch', async () => {
@@ -91,22 +86,56 @@ const loanSlice = createSlice({
         } else {
           state.loans.push(action.payload);
         }
+        state.selectedLoan = action.payload;
       })
       .addCase(fetchLoanById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch loan';
       })
+      .addCase(createLoan.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(createLoan.fulfilled, (state, action) => {
+        state.loading = false;
         state.loans.push(action.payload);
       })
+      .addCase(createLoan.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to create loan';
+      })
+      .addCase(updateLoan.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(updateLoan.fulfilled, (state, action) => {
-        const index = state.loans.findIndex((loan) => loan.id === action.payload.id);
+        state.loading = false;
+        const index = state.loans.findIndex(loan => loan.id === action.payload.id);
         if (index !== -1) {
           state.loans[index] = action.payload;
         }
+        if (state.selectedLoan?.id === action.payload.id) {
+          state.selectedLoan = action.payload;
+        }
+      })
+      .addCase(updateLoan.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to update loan';
+      })
+      .addCase(deleteLoan.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
       .addCase(deleteLoan.fulfilled, (state, action) => {
-        state.loans = state.loans.filter((loan) => loan.id !== action.payload);
+        state.loading = false;
+        state.loans = state.loans.filter(loan => loan.id !== action.payload);
+        if (state.selectedLoan?.id === action.payload) {
+          state.selectedLoan = null;
+        }
+      })
+      .addCase(deleteLoan.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to delete loan';
       })
       .addCase(silentFetchLoans.fulfilled, (state, action) => {
         state.loans = action.payload;

@@ -14,7 +14,6 @@ import UserList from './pages/UserList';
 import UserDetail from './pages/UserDetail';
 import LoanList from './pages/LoanList';
 import LoanDetail from './pages/LoanDetail';
-import LoanTransfer from './pages/LoanTransfer';
 
 const App: React.FC = () => {
   return (
@@ -29,7 +28,6 @@ const App: React.FC = () => {
               <Route path="/users/:id" element={<UserDetail />} />
               <Route path="/loans" element={<LoanList />} />
               <Route path="/loans/:id" element={<LoanDetail />} />
-              <Route path="/loan-transfer" element={<LoanTransfer />} />
             </Routes>
           </Layout>
         </Router>

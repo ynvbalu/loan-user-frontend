@@ -5,7 +5,6 @@ export interface User {
   lastName: string;
   email: string;
   phoneNumber: string;
-  oooStatus: boolean;
   creationDate: string;
   loans: Loan[];
 }
@@ -18,7 +17,9 @@ export interface Loan {
   term: number;
   startDate: string;
   status: 'ACTIVE' | 'CLOSED' | 'PENDING';
-  user: User;
+  userId: number;
+  username?: string;
+  user?: User;
 }
 
 export interface CreateUserDto {
@@ -27,7 +28,6 @@ export interface CreateUserDto {
   lastName: string;
   email: string;
   phoneNumber: string;
-  oooStatus: boolean;
 }
 
 export interface UpdateUserDto extends Partial<CreateUserDto> {}
@@ -42,10 +42,4 @@ export interface CreateLoanDto {
   userId: number;
 }
 
-export interface UpdateLoanDto extends Partial<CreateLoanDto> {}
-
-export interface LoanTransferDto {
-  sourceUsername: string;
-  targetUsername: string;
-  loanIds: number[];
-} 
+export interface UpdateLoanDto extends Partial<CreateLoanDto> {} 

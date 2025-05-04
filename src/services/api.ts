@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { User, Loan, CreateUserDto, UpdateUserDto, CreateLoanDto, UpdateLoanDto, LoanTransferDto } from '../types';
+import { User, Loan, CreateUserDto, UpdateUserDto, CreateLoanDto, UpdateLoanDto } from '../types';
 
 const API_BASE_URL = 'http://localhost:8080/api';
 
@@ -34,16 +34,6 @@ export const loanApi = {
   deleteLoan: (id: number) => api.delete(`/loans/${id}`),
   getLoanCount: () => api.get<number>('/loans/count'),
   checkLoanExists: (id: number) => api.get<boolean>(`/loans/exists/${id}`),
-};
-
-// User-Loan APIs
-export const userLoanApi = {
-  addLoanToUser: (userId: number, loan: CreateLoanDto) => 
-    api.post<Loan>(`/users/${userId}/loans`, loan),
-  getUserLoans: (userId: number) => 
-    api.get<Loan[]>(`/users/${userId}/loans`),
-  transferLoans: (transfer: LoanTransferDto) => 
-    api.post('/loans/transfer', transfer),
 };
 
 export default api; 
