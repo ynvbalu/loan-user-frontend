@@ -96,7 +96,8 @@ const LoanList: React.FC = () => {
   }
 
   // Helper function to check if a user is OOO
-  const isUserOOO = (username: string) => {
+  const isUserOOO = (username: string | undefined) => {
+    if (!username) return false;
     const user = users.find(u => u.username === username);
     return user?.oooStatus || false;
   };
@@ -120,12 +121,12 @@ const LoanList: React.FC = () => {
           <TableHead>
             <TableRow>
               <TableCell>Loan Number</TableCell>
+              <TableCell>User</TableCell>
               <TableCell>Amount</TableCell>
               <TableCell>Interest Rate</TableCell>
               <TableCell>Term (months)</TableCell>
               <TableCell>Start Date</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>User</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -143,13 +144,8 @@ const LoanList: React.FC = () => {
                   }}
                 >
                   <TableCell>{loan.loanNumber}</TableCell>
-                  <TableCell>${loan.amount.toLocaleString()}</TableCell>
-                  <TableCell>{loan.interestRate}%</TableCell>
-                  <TableCell>{loan.term}</TableCell>
-                  <TableCell>{new Date(loan.startDate).toLocaleDateString()}</TableCell>
-                  <TableCell>{loan.status}</TableCell>
                   <TableCell>
-                    {loan.username}
+                    {loan.username || 'N/A'}
                     {isOOO && (
                       <Typography 
                         component="span" 
@@ -163,6 +159,11 @@ const LoanList: React.FC = () => {
                       </Typography>
                     )}
                   </TableCell>
+                  <TableCell>${loan.amount.toLocaleString()}</TableCell>
+                  <TableCell>{loan.interestRate}%</TableCell>
+                  <TableCell>{loan.term}</TableCell>
+                  <TableCell>{new Date(loan.startDate).toLocaleDateString()}</TableCell>
+                  <TableCell>{loan.status}</TableCell>
                   <TableCell>
                     <IconButton
                       color="primary"
