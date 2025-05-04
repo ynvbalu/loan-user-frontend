@@ -128,9 +128,9 @@ const UserList: React.FC = () => {
               <TableRow 
                 key={user.id}
                 sx={{
-                  backgroundColor: user.oooStatus ? '#fffde7' : 'inherit',
+                  backgroundColor: user.oooStatus ? '#fffde7' : '#e8f5e9',
                   '&:hover': {
-                    backgroundColor: user.oooStatus ? '#fff9c4' : 'rgba(0, 0, 0, 0.04)',
+                    backgroundColor: user.oooStatus ? '#fff9c4' : '#c8e6c9',
                   },
                 }}
               >
