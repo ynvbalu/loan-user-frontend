@@ -126,15 +126,15 @@ const ChatbotWidget: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          accept: 'application/json',
+          accept: '*/*',
         },
         body: JSON.stringify({ text: inputText }),
       });
       if (!response.ok) throw new Error('API error');
-      const data = await response.json();
+      const text = await response.text();
       setChatHistory((prev) => [
         ...prev,
-        { sender: 'bot', text: JSON.stringify(data, null, 2) },
+        { sender: 'bot', text: text },
       ]);
       dispatch(silentFetchLoans());
       dispatch(silentFetchUsers());
