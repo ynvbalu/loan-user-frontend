@@ -285,6 +285,8 @@ const ChatbotWidget: React.FC = () => {
               aria-label="Type your message"
               disabled={loading}
               autoFocus={open}
+              autoComplete="off"
+              name="chatbot-input-unique"
               sx={{
                 '& .MuiInputBase-root': {
                   transition: 'all 0.3s ease',
